@@ -15,6 +15,8 @@
 char *tzargentina = "America/Buenos_Aires";
 char *tzutc = "UTC";
 char *tzberlin = "Europe/Berlin";
+char *tzindia = "Asia/Calcutta";
+char *tzsydney = "Australia/Sydney";
 
 static Display *dpy;
 
@@ -97,9 +99,11 @@ main(void)
 {
 	char *status;
 	char *avgs;
-	char *tmar;
+	//char *tmar;
 	char *tmutc;
-	char *tmbln;
+	//char *tmbln;
+    char *tmin;
+    char *tmsyd;
 
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
@@ -108,17 +112,21 @@ main(void)
 
 	for (;;sleep(90)) {
 		avgs = loadavg();
-		tmar = mktimes("%H:%M", tzargentina);
+		//tmar = mktimes("%H:%M", tzargentina);
 		tmutc = mktimes("%H:%M", tzutc);
-		tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzberlin);
+		tmin = mktimes("%H:%M", tzindia);
+		//tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzberlin);
+		tmsyd = mktimes("%a %d %b\x06%H:%M\x02%Z %Y", tzsydney);
 
-		status = smprintf("L:%s A:%s U:%s %s",
-				avgs, tmar, tmutc, tmbln);
+		status = smprintf("| IN: %s | UTC: %s |\x02 %s \x01",
+                                  tmin, tmutc, tmsyd);
 		setstatus(status);
 		free(avgs);
-		free(tmar);
+		//free(tmar);
 		free(tmutc);
-		free(tmbln);
+		//free(tmbln);
+        free(tmin);
+        free(tmsyd);
 		free(status);
 	}
 
